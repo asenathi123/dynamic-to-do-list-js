@@ -66,3 +66,38 @@ li {
 .remove-btn:hover {
     background-color: #d9534f;
 }
+.completed {
+    text-decoration: line-through;
+    color: gray;
+}
+function renderTask(task) {
+    const li = document.createElement('li');
+    li.textContent = task.text;
+    li.dataset.id = task.id;
+
+    // Add completed class if the task is marked completed
+    if (task.completed) {
+        li.classList.add('completed');
+    }
+
+    // Toggle completion on click
+    li.addEventListener('click', (event) => {
+        if (event.target.tagName !== 'BUTTON') { // avoid conflict with remove button
+            li.classList.toggle('completed');
+            toggleTaskCompletion(task.id);
+        }
+    });
+
+    // Remove button
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = "Remove";
+    removeBtn.className = "remove-btn";
+
+    removeBtn.onclick = () => {
+        li.remove();
+        deleteTaskFromStorage(task.id);
+    };
+
+    li.appendChild(removeBtn);
+    taskList.appendChild(li);
+}
